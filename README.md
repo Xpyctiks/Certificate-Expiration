@@ -8,7 +8,8 @@ Returns integer codes for easy evaulate in any monitoring system:
 2 - means the certificate is expired  
 255 - means any other error  
 
-#Zabbix template  
+# Zabbix template  
 
 I have included an example of Zabbix 7.x template for this script.  
-Just substitute inside the template script path "/opt/zabbix/scripts/Certificate-Expiration/certificate-expiration.py" to your path  
+Just substitute inside the template script path "/opt/zabbix/scripts/Certificate-Expiration/certificate-expiration.py" to your path before import the template into Zabbix.  
+Use Macro {$DOMAIN} to set a domain you need when creating a host for certificate monitoring.  
