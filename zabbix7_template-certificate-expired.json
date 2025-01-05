@@ -1,0 +1,69 @@
+{
+    "zabbix_export": {
+        "version": "7.2",
+        "template_groups": [
+            {
+                "uuid": "ecac24b5b5d142c89c0843c7d50d32e0",
+                "name": "My Templates"
+            }
+        ],
+        "templates": [
+            {
+                "uuid": "1afbd2b060234bc188eb40df0b288043",
+                "template": "Certificate expiration",
+                "name": "Certificate expiration",
+                "groups": [
+                    {
+                        "name": "My Templates"
+                    }
+                ],
+                "items": [
+                    {
+                        "uuid": "3c86902231314299afeab35085c07207",
+                        "name": "Certificate expiration status",
+                        "key": "system.run[/opt/zabbix/scripts/Certificate-Expiration/certificate-expiration.py \"{$DOMAIN}\"]",
+                        "delay": "1d",
+                        "history": "90d",
+                        "trends": "0",
+                        "tags": [
+                            {
+                                "tag": "{$DOMAIN}"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "dd3fa82bace84fdca746a3a2ecbda32b",
+                                "expression": "last(/Certificate expiration/system.run[/opt/zabbix/scripts/Certificate-Expiration/certificate-expiration.py \"{$DOMAIN}\"])=2",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "last(/Certificate expiration/system.run[/opt/zabbix/scripts/Certificate-Expiration/certificate-expiration.py \"{$DOMAIN}\"])<>2",
+                                "name": "Certificate {$DOMAIN} is EXPIRED",
+                                "priority": "DISASTER"
+                            },
+                            {
+                                "uuid": "c33452a2a7f2493c81db2b7c67eff80b",
+                                "expression": "last(/Certificate expiration/system.run[/opt/zabbix/scripts/Certificate-Expiration/certificate-expiration.py \"{$DOMAIN}\"])=1",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "last(/Certificate expiration/system.run[/opt/zabbix/scripts/Certificate-Expiration/certificate-expiration.py \"{$DOMAIN}\"])<>1",
+                                "name": "Certificate {$DOMAIN} is expiring soon",
+                                "priority": "HIGH"
+                            },
+                            {
+                                "uuid": "0b867249c5ff4c7f9fbf696c742d9522",
+                                "expression": "last(/Certificate expiration/system.run[/opt/zabbix/scripts/Certificate-Expiration/certificate-expiration.py \"{$DOMAIN}\"])=255",
+                                "name": "Some error while getting certificate info - {$DOMAIN}",
+                                "priority": "DISASTER",
+                                "manual_close": "YES"
+                            }
+                        ]
+                    }
+                ],
+                "tags": [
+                    {
+                        "tag": "Application",
+                        "value": "Certificate Expiration"
+                    }
+                ]
+            }
+        ]
+    }
+}
