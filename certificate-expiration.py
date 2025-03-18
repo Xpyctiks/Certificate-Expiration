@@ -31,7 +31,7 @@ try:
             pem_data = ssl.DER_cert_to_PEM_cert(data)
             cert_data = x509.load_pem_x509_certificate(str.encode(pem_data))
             #Gettings certificate's NotAfter date and parsing it.
-            validity = cert_data.not_valid_after
+            validity = cert_data.not_valid_after_utc
             certYear = int(validity.strftime("%Y"))
             certMonth = int(validity.strftime("%m"))
             certDay = int(validity.strftime("%d"))
