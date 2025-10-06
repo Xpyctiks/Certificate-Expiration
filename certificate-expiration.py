@@ -1,4 +1,4 @@
-#!/bin/env python3
+#!/usr/local/bin/python3
 
 # Certificate-expiration.py - python script to check any domain for its certificate expiration.
 #
@@ -9,14 +9,13 @@
 
 from cryptography import x509
 from datetime import date
-from datetime import datetime
 import socket
 import ssl
 import sys
 
 #Check arguments. If not provided - exit with an error code 255
 if len(sys.argv) < 2:
-    print("255")
+    print("254")
     quit()
 hostname = sys.argv[1].strip()
 context = ssl.create_default_context()
@@ -40,9 +39,17 @@ try:
             nowYear = int(now.strftime("%Y"))
             nowMonth = int(now.strftime("%m"))
             nowDay = int(now.strftime("%d"))
-            if certYear >= nowYear:
+            if certYear < nowYear:
+                #Alarm.Expired
+                print("2")
+                quit()
+            if certYear == nowYear:
                 #check month.If cert's month is less or current - go on. Else - everything is ok, we have a time.
-                if certMonth <= nowMonth:
+                if certMonth < nowMonth:
+                    #Alarm.Expired
+                    print("2")
+                    quit()
+                if certMonth == nowMonth:
                     if (certDay >= nowDay+3):
                         #OK result. We have at least 3 days before the expiration
                         print("0")
@@ -55,14 +62,19 @@ try:
                         #Alarm. Expired
                         print("2")
                         quit()
-                else:
-                    #OK result. We have at least 1 month before the expiration
+                if certMonth > nowMonth:
+                    #OK result.
                     print("0")
                     quit()
-            else:
-                #Alarm.Expired
-                print("2")
+                else:
+                    #OK result.
+                    print("0")
+                    quit()
+            if certYear > nowYear:
+                #OK result.
+                print("0")
                 quit()
+
 except Exception as msg:
     print("255")
     #Uncomment the string below if need to see exactly the error message
